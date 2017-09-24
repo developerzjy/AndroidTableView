@@ -107,6 +107,7 @@ public class TableView extends HorizontalScrollView {
 
     private void fillTable() {
         mHeaderLayout.addView(createHeader());
+        mHeaderLayout.setBackgroundColor(Color.parseColor("#EEB422"));
 
         mDividerView.setBackgroundColor(Color.parseColor("#2c2c2c"));
         mDividerView.setMinimumWidth(100 * mColumnCount);
