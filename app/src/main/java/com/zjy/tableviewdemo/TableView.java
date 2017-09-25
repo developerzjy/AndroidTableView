@@ -32,16 +32,19 @@ public class TableView extends HorizontalScrollView {
 
     private static final String TAG = "TableView";
 
+    private static final String DEFAULT_HORIZONTAL_LINE_COLOR = "#2c2c2c";
+    private static final String DEFAULT_HEADER_COLOR = "#2c2c2c";
+    private static final String DEFAULT_TEXT_COLOR = "#000000";
     private static final int DEFAULT_COLUMN_WIDTH = 200;
     private static final int DEFAULT_HORIZONTAL_PADDING = 5;
     private static final int DEFAULT_VERTICAL_PADDING = 10;
     private static final int DEFAULT_OUTER_BORDER = R.drawable.frame;
-    private static final String DEFAULT_HORIZONTAL_LINE_COLOR = "#2c2c2c";
     private static final int DEFAULT_UNIT_BACKGROUND = R.drawable.right_border;
-    private static final String DEFAULT_HEADER_COLOR = "#2c2c2c";
-    private static final int DEFAULT_DEVIDER_HEIGHT = 2;
+    private static final int DEFAULT_DIVIDER_HEIGHT = 2;
+    private static final int DEFAULT_TEXT_SIZE = 15;
 
     private Context mContext;
+    private LinearLayout.LayoutParams mItemLayoutParams;
     private RelativeLayout mTableLayout;
     private FrameLayout mHeaderLayout;
     private View mDividerView;
@@ -64,7 +67,11 @@ public class TableView extends HorizontalScrollView {
     private int mHeaderBackColor;
     private int mListViewBackColor;
 
-    private LinearLayout.LayoutParams mItemLayoutParams;
+    private int mHeaderTextSize;
+    private int mContentTextSize;
+    private int mHeaderTextColor;
+    private int mContentTextColor;
+    private boolean mIsHeaderTextBold;
 
     public TableView(Context context) {
         this(context, null);
@@ -94,7 +101,12 @@ public class TableView extends HorizontalScrollView {
         mHeaderBackColor = Color.parseColor(DEFAULT_HEADER_COLOR);
         mHorizontalLineColor = Color.parseColor(DEFAULT_HORIZONTAL_LINE_COLOR);
         mOuterBorder = DEFAULT_OUTER_BORDER;
-        mDividerHeight = DEFAULT_DEVIDER_HEIGHT;
+        mDividerHeight = DEFAULT_DIVIDER_HEIGHT;
+        mHeaderTextSize = DEFAULT_TEXT_SIZE;
+        mContentTextSize = DEFAULT_TEXT_SIZE;
+        mHeaderTextColor = Color.parseColor(DEFAULT_TEXT_COLOR);
+        mContentTextColor = Color.parseColor(DEFAULT_TEXT_COLOR);
+        mIsHeaderTextBold = false;
     }
 
     private void initViews() {
@@ -115,6 +127,11 @@ public class TableView extends HorizontalScrollView {
             TextView view = new TextView(mContext);
             view.setWidth(mColumnWidth[i]);
             view.setGravity(Gravity.CENTER_HORIZONTAL);
+            view.setTextSize(mHeaderTextSize);
+            view.setTextColor(mHeaderTextColor);
+            if(mIsHeaderTextBold) {
+                view.getPaint().setFakeBoldText(true);
+            }
             view.setText(mHeaderNames[i]);
             view.setMaxLines(1);
             view.setBackgroundResource(DEFAULT_UNIT_BACKGROUND);
@@ -139,6 +156,8 @@ public class TableView extends HorizontalScrollView {
         TextView view = new TextView(mContext);
         view.setGravity(Gravity.CENTER);
         view.setLayoutParams(params);
+        view.setTextSize(mContentTextSize);
+        view.setTextColor(mContentTextColor);
         if (mUnitSingleLine) {
             view.setMaxLines(1);
         }
@@ -353,4 +372,25 @@ public class TableView extends HorizontalScrollView {
     public void setListDividerHeight(int height) {
         mDividerHeight = height;
     }
+
+    public void setHeaderTextSize(int size) {
+        this.mHeaderTextSize = size;
+    }
+
+    public void setContentTextSize(int size) {
+        this.mContentTextSize = size;
+    }
+
+    public void setHeaderTextColor(@ColorRes int color) {
+        this.mHeaderTextColor = ContextCompat.getColor(mContext, color);
+    }
+
+    public void setContentTextColor(@ColorRes int color) {
+        this.mContentTextColor = ContextCompat.getColor(mContext, color);
+    }
+
+    public void setIsHeaderTextBold(boolean isBold) {
+        this.mIsHeaderTextBold = isBold;
+    }
+
 }
