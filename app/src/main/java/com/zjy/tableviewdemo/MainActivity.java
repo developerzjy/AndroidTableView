@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         tv.setHeaderTextSize(25);
         tv.setContentTextSize(15);
 //        tv.setIsHeaderTextBold(true);
+//        tv.setIsShowHeader(false);
 
     }
 

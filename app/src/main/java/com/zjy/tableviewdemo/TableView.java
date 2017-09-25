@@ -3,7 +3,6 @@ package com.zjy.tableviewdemo;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
 import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
@@ -67,6 +66,7 @@ public class TableView extends HorizontalScrollView {
     private int mHeaderBackColor;
     private int mListViewBackColor;
 
+    private boolean mIsShowHeader;
     private int mHeaderTextSize;
     private int mContentTextSize;
     private int mHeaderTextColor;
@@ -107,6 +107,7 @@ public class TableView extends HorizontalScrollView {
         mHeaderTextColor = Color.parseColor(DEFAULT_TEXT_COLOR);
         mContentTextColor = Color.parseColor(DEFAULT_TEXT_COLOR);
         mIsHeaderTextBold = false;
+        mIsShowHeader = true;
     }
 
     private void initViews() {
@@ -129,7 +130,7 @@ public class TableView extends HorizontalScrollView {
             view.setGravity(Gravity.CENTER_HORIZONTAL);
             view.setTextSize(mHeaderTextSize);
             view.setTextColor(mHeaderTextColor);
-            if(mIsHeaderTextBold) {
+            if (mIsHeaderTextBold) {
                 view.getPaint().setFakeBoldText(true);
             }
             view.setText(mHeaderNames[i]);
@@ -175,8 +176,12 @@ public class TableView extends HorizontalScrollView {
     }
 
     private void fillTable() {
-        mHeaderLayout.addView(createHeader());
-        mHeaderLayout.setBackgroundColor(mHeaderBackColor);
+        if (mIsShowHeader) {
+            mHeaderLayout.addView(createHeader());
+            mHeaderLayout.setBackgroundColor(mHeaderBackColor);
+        } else {
+            mHeaderLayout.setVisibility(GONE);
+        }
 
         mAdapter = new TableAdapter();
         mContentListView.setAdapter(mAdapter);
@@ -393,4 +398,7 @@ public class TableView extends HorizontalScrollView {
         this.mIsHeaderTextBold = isBold;
     }
 
+    public void setIsShowHeader(boolean isShow) {
+        mIsShowHeader = isShow;
+    }
 }
