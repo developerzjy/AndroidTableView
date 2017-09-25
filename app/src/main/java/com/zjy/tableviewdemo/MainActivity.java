@@ -1,5 +1,6 @@
 package com.zjy.tableviewdemo;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -35,6 +36,15 @@ public class MainActivity extends AppCompatActivity {
         tv.setHeaderNames("t1","t2","t3","t4","t5","t6","t7","t8","t9","t10","t11","t12","t13","t14","t15");
         //tv.setHeaderNames("t1","t2","t3");
         tv.setTableData(getTestData2());
+        //tv.setContentColor(R.color.colorAccent);
+//        tv.setColumnWidth(1,100);
+//        tv.setColumnWidth(2,300);
+//        tv.setUnitSingleLine(false);
+//        tv.setUnitPadding(15,30,15,30);
+//        tv.setShowBorder(false);
+        tv.setHeaderColor(R.color.green);
+        tv.setContentColor(R.color.colorPrimary);
+        tv.setTableColorRes(R.drawable.shape_right_border,0,0);
 
     }
 
