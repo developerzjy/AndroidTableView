@@ -14,15 +14,13 @@
         android:id="@+id/table_header_divider"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:layout_below="@id/table_header"
-        android:background="#2c2c2c" />
+        android:layout_below="@id/table_header" />
 
     <ListView
         android:id="@+id/table_content_list"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_below="@id/table_header_divider"
-        android:divider="#2c2c2c"
         android:dividerHeight="1px"
         android:fadeScrollbars="false"
         android:scrollbars="none" />

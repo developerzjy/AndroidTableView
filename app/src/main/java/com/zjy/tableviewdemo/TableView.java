@@ -2,6 +2,11 @@ package com.zjy.tableviewdemo;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
+import android.support.annotation.DrawableRes;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
@@ -27,6 +32,13 @@ public class TableView extends HorizontalScrollView {
 
     private static final String TAG = "TableView";
 
+    private static final int DEFAULT_COLUMN_WIDTH = 200;
+    private static final int DEFAULT_HORIZONTAL_PADDING = 5;
+    private static final int DEFAULT_VERTICAL_PADDING = 10;
+    private static final int DEFAULT_OUTER_BORDER = R.drawable.frame;
+    private static final String DEFAULT_HORIZONTAL_LINE_COLOR = "#2c2c2c";
+    private static final int DEFAULT_UNIT_BACKGROUND = R.drawable.right_border;
+
     private Context mContext;
     private RelativeLayout mTableLayout;
     private FrameLayout mHeaderLayout;
@@ -36,6 +48,16 @@ public class TableView extends HorizontalScrollView {
     private int mColumnCount;
     private String[] mHeaderNames;
     private TableAdapter mAdapter;
+    private int[] mColumnWidth;
+    private int mLineWidth = 0;
+
+    private boolean mUnitSingleLine;
+    private int mTopPadding, mLeftPadding, mBottomPadding, mRightPadding;
+    private boolean mIsShowBorder;
+
+    private int mUnitBackground;
+    private int mHorizontalLineColor;
+    private int mOuterBorder;
 
     private LinearLayout.LayoutParams mItemLayoutParams;
 
@@ -57,16 +79,25 @@ public class TableView extends HorizontalScrollView {
         mContext = getContext();
         mItemLayoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        mUnitSingleLine = true;
+        mTopPadding = DEFAULT_VERTICAL_PADDING;
+        mBottomPadding = DEFAULT_VERTICAL_PADDING;
+        mLeftPadding = DEFAULT_HORIZONTAL_PADDING;
+        mRightPadding = DEFAULT_HORIZONTAL_PADDING;
+        mIsShowBorder = true;
+        mUnitBackground = DEFAULT_UNIT_BACKGROUND;
+        mHorizontalLineColor = Color.parseColor(DEFAULT_HORIZONTAL_LINE_COLOR);
+        mOuterBorder = DEFAULT_OUTER_BORDER;
     }
 
     private void initViews() {
         View.inflate(mContext, R.layout.table_view_layout, this);
-        mTableLayout = (RelativeLayout)findViewById(R.id.table_layout);
+        mTableLayout = (RelativeLayout) findViewById(R.id.table_layout);
         mHeaderLayout = (FrameLayout) findViewById(R.id.table_header);
         mContentListView = (ListView) findViewById(R.id.table_content_list);
         mDividerView = findViewById(R.id.table_header_divider);
 
-        setBackgroundResource(R.drawable.frame);
+        setBackgroundResource(mOuterBorder);
     }
 
     private LinearLayout createHeader() {
@@ -75,12 +106,11 @@ public class TableView extends HorizontalScrollView {
 
         for (int i = 0; i < mColumnCount; i++) {
             TextView view = new TextView(mContext);
-            view.setWidth(100);
+            view.setWidth(mColumnWidth[i]);
             view.setGravity(Gravity.CENTER_HORIZONTAL);
             view.setText(mHeaderNames[i]);
             view.setMaxLines(1);
-            view.setBackgroundResource(R.drawable.right_border);
-            view.setPadding(5, 10, 5, 10);
+            setUnitBackground(view);
             header.addView(view);
         }
         return header;
@@ -90,30 +120,51 @@ public class TableView extends HorizontalScrollView {
         LinearLayout item = new LinearLayout(mContext);
         item.setLayoutParams(mItemLayoutParams);
         for (int i = 0; i < mColumnCount; i++) {
-            item.addView(createUnitView(100));
+            item.addView(createUnitView(mColumnWidth[i]));
         }
         return item;
     }
 
     private TextView createUnitView(int width) {
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                width, LayoutParams.MATCH_PARENT);
         TextView view = new TextView(mContext);
         view.setGravity(Gravity.CENTER);
-        view.setWidth(width);
-        view.setMaxLines(1);
-        view.setBackgroundResource(R.drawable.right_border);
-        view.setPadding(5, 10, 5, 10);
+        view.setLayoutParams(params);
+        if (mUnitSingleLine) {
+            view.setMaxLines(1);
+        }
+        setUnitBackground(view);
         return view;
+    }
+
+    private void setUnitBackground(View v) {
+        if (!mIsShowBorder) {
+            v.setBackground(null);
+        } else {
+            v.setBackgroundResource(mUnitBackground);
+        }
+        v.setPadding(mLeftPadding, mTopPadding, mRightPadding, mBottomPadding);
     }
 
     private void fillTable() {
         mHeaderLayout.addView(createHeader());
         mHeaderLayout.setBackgroundColor(Color.parseColor("#EEB422"));
 
-        mDividerView.setBackgroundColor(Color.parseColor("#2c2c2c"));
-        mDividerView.setMinimumWidth(100 * mColumnCount);
-
         mAdapter = new TableAdapter();
         mContentListView.setAdapter(mAdapter);
+        mContentListView.setBackgroundColor(Color.BLUE);
+
+        if (mIsShowBorder) {
+            mDividerView.setBackgroundColor(mHorizontalLineColor);
+            mDividerView.setMinimumWidth(mLineWidth);
+            mContentListView.setDivider(new ColorDrawable(mHorizontalLineColor));
+            mContentListView.setDividerHeight(1);
+        } else {
+            mContentListView.setDividerHeight(0);
+            mDividerView.setBackgroundColor(Color.parseColor("#00000000"));
+            setBackground(null);
+        }
     }
 
     @Override
@@ -199,11 +250,16 @@ public class TableView extends HorizontalScrollView {
 
     public void setHeaderNames(String... names) {
         if (names == null) {
-            Log.d(TAG, "setHeaderNames: Invalid setting, the param should not be null.");
+            Log.e(TAG, "setHeaderNames: Invalid setting, the param should not be null.");
             return;
         }
         mHeaderNames = names;
         mColumnCount = mHeaderNames.length;
+        mColumnWidth = new int[mColumnCount];
+        for (int i = 0; i < mColumnCount; i++) {
+            mColumnWidth[i] = DEFAULT_COLUMN_WIDTH;
+        }
+        mLineWidth = mColumnCount * DEFAULT_COLUMN_WIDTH;
     }
 
     public void setTableData(List<String[]> data) {
@@ -214,4 +270,72 @@ public class TableView extends HorizontalScrollView {
         setTableData(Arrays.asList(data));
     }
 
+    /**
+     * 设置第 columnIndex 列的宽度为 width
+     */
+    public void setColumnWidth(int columnIndex, int width) {
+        if (columnIndex >= mColumnWidth.length || columnIndex < 0) {
+            Log.e(TAG, "setColumnWidth: columnIndex out of bounds, " +
+                    "columnIndex=" + columnIndex +
+                    " mColumnWidth.length=" + mColumnWidth.length);
+            return;
+        }
+        mLineWidth = mLineWidth - mColumnWidth[columnIndex] + width;
+        mColumnWidth[columnIndex] = width;
+    }
+
+    /**
+     * 单元格是否单行显示，如果不单行显示，内容将根据宽度自动换行显示
+     */
+    public void setUnitSingleLine(boolean isSingleLine) {
+        mUnitSingleLine = isSingleLine;
+    }
+
+    /**
+     * 设置单元格内边距
+     */
+    public void setUnitPadding(int left, int top, int right, int bottom) {
+        mTopPadding = top;
+        mLeftPadding = left;
+        mBottomPadding = bottom;
+        mRightPadding = right;
+    }
+
+    /**
+     * 是否显示边框线
+     */
+    public void setShowBorder(boolean isShowBorder) {
+        mIsShowBorder = isShowBorder;
+    }
+
+    /**
+     * 设置单元格背景颜色，表格横竖线颜色，外边框颜色
+     *
+     * @param resIdUnitBack   单元格的背景资源，默认是一张只有右边框的透明的点9图片,透明区域可拉伸
+     *                        注：表格的竖线是利用这个资源的右边框实现的，如果改背景色，在保证 resIdUnitBack 图片透明的
+     *                        情况下可以使用 {@link #setContentColor(int)} 直接设置ListView背景
+     * @param resIdHLineColor 表格的横线颜色
+     * @param resIdBorder     表格的外边框，默认是一张只有4个边框的透明图片
+     *                        <p>
+     *                        以上参数传 0 使用默认值
+     */
+    public void setTableColorRes(@DrawableRes int resIdUnitBack, @ColorRes int resIdHLineColor, @DrawableRes int resIdBorder) {
+        mUnitBackground = resIdUnitBack == 0 ? DEFAULT_UNIT_BACKGROUND : resIdUnitBack;
+        mHorizontalLineColor = resIdHLineColor == 0 ? Color.parseColor(DEFAULT_HORIZONTAL_LINE_COLOR) : resIdHLineColor;
+        mOuterBorder = resIdBorder == 0 ? DEFAULT_OUTER_BORDER : resIdBorder;
+    }
+
+    /**
+     * 设置表头背景颜色
+     */
+    public void setHeaderColor(@ColorRes int colorId) {
+        mHeaderLayout.setBackgroundColor(ContextCompat.getColor(mContext, colorId));
+    }
+
+    /**
+     * 设置表格背景颜色，需要 mUnitBackground 背景透明才有效
+     */
+    public void setContentColor(@ColorRes int colorId) {
+        mHorizontalLineColor = colorId;
+    }
 }
