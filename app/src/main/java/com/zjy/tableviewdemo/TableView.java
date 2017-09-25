@@ -38,6 +38,8 @@ public class TableView extends HorizontalScrollView {
     private static final int DEFAULT_OUTER_BORDER = R.drawable.frame;
     private static final String DEFAULT_HORIZONTAL_LINE_COLOR = "#2c2c2c";
     private static final int DEFAULT_UNIT_BACKGROUND = R.drawable.right_border;
+    private static final String DEFAULT_HEADER_COLOR = "#2c2c2c";
+    private static final int DEFAULT_DEVIDER_HEIGHT = 2;
 
     private Context mContext;
     private RelativeLayout mTableLayout;
@@ -54,10 +56,13 @@ public class TableView extends HorizontalScrollView {
     private boolean mUnitSingleLine;
     private int mTopPadding, mLeftPadding, mBottomPadding, mRightPadding;
     private boolean mIsShowBorder;
+    private int mDividerHeight;
 
     private int mUnitBackground;
     private int mHorizontalLineColor;
     private int mOuterBorder;
+    private int mHeaderBackColor;
+    private int mListViewBackColor;
 
     private LinearLayout.LayoutParams mItemLayoutParams;
 
@@ -86,8 +91,10 @@ public class TableView extends HorizontalScrollView {
         mRightPadding = DEFAULT_HORIZONTAL_PADDING;
         mIsShowBorder = true;
         mUnitBackground = DEFAULT_UNIT_BACKGROUND;
+        mHeaderBackColor = Color.parseColor(DEFAULT_HEADER_COLOR);
         mHorizontalLineColor = Color.parseColor(DEFAULT_HORIZONTAL_LINE_COLOR);
         mOuterBorder = DEFAULT_OUTER_BORDER;
+        mDividerHeight = DEFAULT_DEVIDER_HEIGHT;
     }
 
     private void initViews() {
@@ -110,7 +117,8 @@ public class TableView extends HorizontalScrollView {
             view.setGravity(Gravity.CENTER_HORIZONTAL);
             view.setText(mHeaderNames[i]);
             view.setMaxLines(1);
-            setUnitBackground(view);
+            view.setBackgroundResource(DEFAULT_UNIT_BACKGROUND);
+            view.setPadding(mLeftPadding, mTopPadding, mRightPadding, mBottomPadding);
             header.addView(view);
         }
         return header;
@@ -149,17 +157,17 @@ public class TableView extends HorizontalScrollView {
 
     private void fillTable() {
         mHeaderLayout.addView(createHeader());
-        mHeaderLayout.setBackgroundColor(Color.parseColor("#EEB422"));
+        mHeaderLayout.setBackgroundColor(mHeaderBackColor);
 
         mAdapter = new TableAdapter();
         mContentListView.setAdapter(mAdapter);
-        mContentListView.setBackgroundColor(Color.BLUE);
+        mContentListView.setBackgroundColor(mListViewBackColor);
 
         if (mIsShowBorder) {
             mDividerView.setBackgroundColor(mHorizontalLineColor);
             mDividerView.setMinimumWidth(mLineWidth);
             mContentListView.setDivider(new ColorDrawable(mHorizontalLineColor));
-            mContentListView.setDividerHeight(1);
+            mContentListView.setDividerHeight(mDividerHeight);
         } else {
             mContentListView.setDividerHeight(0);
             mDividerView.setBackgroundColor(Color.parseColor("#00000000"));
@@ -321,7 +329,7 @@ public class TableView extends HorizontalScrollView {
      */
     public void setTableColorRes(@DrawableRes int resIdUnitBack, @ColorRes int resIdHLineColor, @DrawableRes int resIdBorder) {
         mUnitBackground = resIdUnitBack == 0 ? DEFAULT_UNIT_BACKGROUND : resIdUnitBack;
-        mHorizontalLineColor = resIdHLineColor == 0 ? Color.parseColor(DEFAULT_HORIZONTAL_LINE_COLOR) : resIdHLineColor;
+        mHorizontalLineColor = resIdHLineColor == 0 ? Color.parseColor(DEFAULT_HORIZONTAL_LINE_COLOR) : ContextCompat.getColor(mContext, resIdHLineColor);
         mOuterBorder = resIdBorder == 0 ? DEFAULT_OUTER_BORDER : resIdBorder;
     }
 
@@ -329,13 +337,20 @@ public class TableView extends HorizontalScrollView {
      * 设置表头背景颜色
      */
     public void setHeaderColor(@ColorRes int colorId) {
-        mHeaderLayout.setBackgroundColor(ContextCompat.getColor(mContext, colorId));
+        mHeaderBackColor = ContextCompat.getColor(mContext, colorId);
     }
 
     /**
      * 设置表格背景颜色，需要 mUnitBackground 背景透明才有效
      */
     public void setContentColor(@ColorRes int colorId) {
-        mHorizontalLineColor = colorId;
+        mListViewBackColor = ContextCompat.getColor(mContext, colorId);
+    }
+
+    /**
+     * 设置ListView的DividerHeight
+     */
+    public void setListDividerHeight(int height) {
+        mDividerHeight = height;
     }
 }
