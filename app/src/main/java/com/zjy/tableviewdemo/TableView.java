@@ -32,7 +32,7 @@ public class TableView extends HorizontalScrollView {
     private static final String TAG = "TableView";
 
     private static final String DEFAULT_HORIZONTAL_LINE_COLOR = "#2c2c2c";
-    private static final String DEFAULT_HEADER_COLOR = "#2c2c2c";
+    private static final String DEFAULT_HEADER_COLOR = "#D1D1D1";
     private static final String DEFAULT_TEXT_COLOR = "#000000";
     private static final int DEFAULT_COLUMN_WIDTH = 200;
     private static final int DEFAULT_HORIZONTAL_PADDING = 5;
@@ -280,6 +280,20 @@ public class TableView extends HorizontalScrollView {
         return null;
     }
 
+    private void updateSomethingByColumnCountChange() {
+        // update mColumnWidth
+        mColumnWidth = new int[mColumnCount];
+        for (int i = 0; i < mColumnCount; i++) {
+            mColumnWidth[i] = DEFAULT_COLUMN_WIDTH;
+        }
+
+        //update mDividerView width
+        mLineWidth = mColumnCount * DEFAULT_COLUMN_WIDTH;
+    }
+
+    /**
+     * 设置表头
+     */
     public void setHeaderNames(String... names) {
         if (names == null) {
             Log.e(TAG, "setHeaderNames: Invalid setting, the param should not be null.");
@@ -287,17 +301,42 @@ public class TableView extends HorizontalScrollView {
         }
         mHeaderNames = names;
         mColumnCount = mHeaderNames.length;
-        mColumnWidth = new int[mColumnCount];
-        for (int i = 0; i < mColumnCount; i++) {
-            mColumnWidth[i] = DEFAULT_COLUMN_WIDTH;
-        }
-        mLineWidth = mColumnCount * DEFAULT_COLUMN_WIDTH;
+        updateSomethingByColumnCountChange();
     }
 
+    /**
+     * 设置表格列数
+     * 若在本方法之后调用 {@link #setHeaderNames(String...)} 会覆盖此处的设置
+     * @param count 若参数值与表头 mHeaderNames 长度不一致会做一些默认的处理
+     */
+    public void setColumnCount(int count) {
+        mColumnCount = count;
+        updateSomethingByColumnCountChange();
+        if (mHeaderNames == null) {
+            mHeaderNames = new String[mColumnCount];
+            return;
+        }
+        if (mColumnCount<=mHeaderNames.length){
+            return;
+        }
+        String[] temp = new String[mColumnCount];
+        System.arraycopy(mHeaderNames,0,temp,0,mHeaderNames.length);
+        mHeaderNames = temp;
+        for (int i = 0; i < mHeaderNames.length; i++) {
+            Log.d(TAG, ":::: i="+i+"   value="+mHeaderNames[i]);
+        }
+    }
+
+    /**
+     * 设置表格数据
+     */
     public void setTableData(List<String[]> data) {
         mTableData = copyData(data);
     }
 
+    /**
+     * 设置表格数据
+     */
     public void setTableData(String[][] data) {
         setTableData(Arrays.asList(data));
     }
