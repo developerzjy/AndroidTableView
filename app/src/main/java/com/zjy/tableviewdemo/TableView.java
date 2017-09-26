@@ -108,8 +108,6 @@ public class TableView extends HorizontalScrollView {
         mTableLayout = (RelativeLayout) findViewById(R.id.table_layout);
         mHeaderLayout = (FrameLayout) findViewById(R.id.table_header);
         mContentListView = (ListView) findViewById(R.id.table_content_list);
-
-        setBackground(mFrameDrawable);
     }
 
     private LinearLayout createHeader() {
@@ -176,6 +174,8 @@ public class TableView extends HorizontalScrollView {
 
         mAdapter = new TableAdapter();
         mContentListView.setAdapter(mAdapter);
+
+        setBackground(mFrameDrawable);
     }
 
     @Override
