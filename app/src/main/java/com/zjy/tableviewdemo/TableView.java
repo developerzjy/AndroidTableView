@@ -3,12 +3,9 @@ package com.zjy.tableviewdemo;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.LayerDrawable;
-import android.graphics.drawable.ShapeDrawable;
 import android.support.annotation.ColorRes;
-import android.support.annotation.DrawableRes;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -36,10 +33,14 @@ public class TableView extends HorizontalScrollView {
     private static final String TAG = "TableView";
 
     private static final String DEFAULT_TEXT_COLOR = "#000000";
+    private static final String DEFAULT_BORDER_COLOR = "#000000";
+    private static final String DEFAULT_HEADER_BACK_COLOR = "#BDBDBD";
+    private static final String DEFAULT_UNIT_BACK_COLOR = "#FCFCFC";
     private static final int DEFAULT_COLUMN_WIDTH = 200;
     private static final int DEFAULT_HORIZONTAL_PADDING = 5;
     private static final int DEFAULT_VERTICAL_PADDING = 10;
     private static final int DEFAULT_TEXT_SIZE = 15;
+    private static final int DEFAULT_BORDER_WIDTH = 2;
 
     private Context mContext;
     private LinearLayout.LayoutParams mItemLayoutParams;
@@ -66,6 +67,15 @@ public class TableView extends HorizontalScrollView {
     private GradientDrawable mFrameDrawable;
     private LayerDrawable mHeaderBackDrawable;
     private LayerDrawable mUnitBackDrawable;
+
+    private int mFrameBorderWidth;
+    private int mFrameBorderColor;
+    private int mHeaderBorderWidth;
+    private int mHeaderBorderColor;
+    private int mHeaderBackColor;
+    private int mUnitBorderWidth;
+    private int mUnitBorderColor;
+    private int mUnitBackColor;
 
     public TableView(Context context) {
         this(context, null);
@@ -101,6 +111,28 @@ public class TableView extends HorizontalScrollView {
         mFrameDrawable = (GradientDrawable) res.getDrawable(R.drawable.table_view_frame, null);
         mHeaderBackDrawable = (LayerDrawable) res.getDrawable(R.drawable.table_view_header_back, null);
         mUnitBackDrawable = (LayerDrawable) res.getDrawable(R.drawable.table_view_unit_back, null);
+
+        mFrameBorderWidth = DEFAULT_BORDER_WIDTH;
+        mFrameBorderColor = Color.parseColor(DEFAULT_BORDER_COLOR);
+        mHeaderBorderWidth = DEFAULT_BORDER_WIDTH;
+        mHeaderBorderColor = Color.parseColor(DEFAULT_BORDER_COLOR);
+        mHeaderBackColor = Color.parseColor(DEFAULT_HEADER_BACK_COLOR);
+        mUnitBorderWidth = DEFAULT_BORDER_WIDTH;
+        mUnitBorderColor = Color.parseColor(DEFAULT_BORDER_COLOR);
+        mUnitBackColor = Color.parseColor(DEFAULT_UNIT_BACK_COLOR);
+        updateDrawable();
+    }
+
+    private void updateDrawable() {
+        mFrameDrawable.setStroke(mFrameBorderWidth, mFrameBorderColor);
+
+        ((GradientDrawable) mHeaderBackDrawable.getDrawable(0)).setColor(mHeaderBorderColor);
+        ((GradientDrawable) mHeaderBackDrawable.getDrawable(1)).setColor(mHeaderBackColor);
+        mHeaderBackDrawable.setLayerInset(1, 0, 0, mHeaderBorderWidth, mHeaderBorderWidth);
+
+        ((GradientDrawable) mUnitBackDrawable.getDrawable(0)).setColor(mUnitBorderColor);
+        ((GradientDrawable) mUnitBackDrawable.getDrawable(1)).setColor(mUnitBackColor);
+        mUnitBackDrawable.setLayerInset(1, 0, 0, mUnitBorderWidth, mUnitBorderWidth);
     }
 
     private void initViews() {
@@ -157,15 +189,12 @@ public class TableView extends HorizontalScrollView {
     }
 
     private void setUnitBackground(View v) {
-        if (!mIsShowBorder) {
-            v.setBackground(null);
-        } else {
-            v.setBackground(mUnitBackDrawable);
-        }
+        v.setBackground(mUnitBackDrawable);
         v.setPadding(mLeftPadding, mTopPadding, mRightPadding, mBottomPadding);
     }
 
     private void fillTable() {
+        updateDrawable();
         if (mIsShowHeader) {
             mHeaderLayout.addView(createHeader());
         } else {
@@ -368,5 +397,40 @@ public class TableView extends HorizontalScrollView {
 
     public void setIsShowHeader(boolean isShow) {
         mIsShowHeader = isShow;
+    }
+
+    public void setIsShowBorder(boolean isShow) {
+        mIsShowBorder = isShow;
+        mFrameBorderWidth = 0;
+        mHeaderBorderWidth = 0;
+        mUnitBorderWidth = 0;
+    }
+
+    public void setFrameBorderColor(@ColorRes int color) {
+        mFrameBorderColor = ContextCompat.getColor(mContext, color);
+    }
+
+    public void setHeaderBorderColor(@ColorRes int color) {
+        mHeaderBorderColor = ContextCompat.getColor(mContext, color);
+    }
+
+    public void setHeaderBorderWidth(int width) {
+        mHeaderBorderWidth = mIsShowBorder ? width : 0;
+    }
+
+    public void setHeaderBackColor(@ColorRes int color) {
+        mHeaderBackColor = ContextCompat.getColor(mContext, color);
+    }
+
+    public void setUnitBorderColor(@ColorRes int color) {
+        mUnitBorderColor = ContextCompat.getColor(mContext, color);
+    }
+
+    public void setUnitBorderWidth(int width) {
+        mUnitBorderWidth = mIsShowBorder ? width : 0;
+    }
+
+    public void setUnitBackColor(@ColorRes int color) {
+        mUnitBackColor = ContextCompat.getColor(mContext, color);
     }
 }

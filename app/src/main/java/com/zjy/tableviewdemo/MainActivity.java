@@ -36,13 +36,10 @@ public class MainActivity extends AppCompatActivity {
         tv.setHeaderNames("t1","t2","t3","t4","t5","t6","t7","t8","t9","t10","t11","t12","t13","t14","t15");
         //tv.setHeaderNames("t1","t2","t3");
         tv.setTableData(getTestData2());
-        //tv.setContentColor(R.color.colorAccent);
 //        tv.setColumnWidth(1,100);
 //        tv.setColumnWidth(2,300);
 //        tv.setUnitSingleLine(false);
 //        tv.setUnitPadding(15,30,15,30);
-//        tv.setShowBorder(false);
-//        tv.setContentColor(R.color.colorPrimary);
 
 //        tv.setHeaderTextColor(R.color.test1);
 //        tv.setContentTextColor(R.color.test2);
@@ -51,6 +48,15 @@ public class MainActivity extends AppCompatActivity {
 //        tv.setIsHeaderTextBold(true);
 //        tv.setIsShowHeader(false);
 
+//        tv.setIsShowBorder(false);
+
+//        tv.setFrameBorderColor(R.color.test2);
+//        tv.setHeaderBorderColor(R.color.green);
+//        tv.setHeaderBorderWidth(8);
+//        tv.setHeaderBackColor(R.color.test1);
+//        tv.setUnitBorderColor(R.color.colorAccent);
+//        tv.setUnitBorderWidth(8);
+//        tv.setUnitBackColor(R.color.test3);
     }
 
     private List<String[]> getTestData1() {
