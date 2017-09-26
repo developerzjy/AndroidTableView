@@ -244,8 +244,9 @@ public class TableView extends HorizontalScrollView {
             String[] data = mData.get(position);
             for (int i = 0; i < mColumnNum; i++) {
                 View childView = itemLayout.getChildAt(i);
+                String text = i >= data.length ? "" : data[i];
                 if (childView instanceof TextView) {
-                    ((TextView) childView).setText(data[i]);
+                    ((TextView) childView).setText(text);
                 }
             }
             return convertView;
@@ -307,6 +308,7 @@ public class TableView extends HorizontalScrollView {
     /**
      * 设置表格列数
      * 若在本方法之后调用 {@link #setHeaderNames(String...)} 会覆盖此处的设置
+     *
      * @param count 若参数值与表头 mHeaderNames 长度不一致会做一些默认的处理
      */
     public void setColumnCount(int count) {
@@ -316,15 +318,12 @@ public class TableView extends HorizontalScrollView {
             mHeaderNames = new String[mColumnCount];
             return;
         }
-        if (mColumnCount<=mHeaderNames.length){
+        if (mColumnCount <= mHeaderNames.length) {
             return;
         }
         String[] temp = new String[mColumnCount];
-        System.arraycopy(mHeaderNames,0,temp,0,mHeaderNames.length);
+        System.arraycopy(mHeaderNames, 0, temp, 0, mHeaderNames.length);
         mHeaderNames = temp;
-        for (int i = 0; i < mHeaderNames.length; i++) {
-            Log.d(TAG, ":::: i="+i+"   value="+mHeaderNames[i]);
-        }
     }
 
     /**
