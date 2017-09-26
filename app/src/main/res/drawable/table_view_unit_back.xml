@@ -2,14 +2,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-            <!--    边框颜色    -->
-            <solid android:color="#CD0000"/>
+            <solid android:color="#000000"/>
         </shape>
     </item>
-    <item android:right="2px">
+    <item android:right="2px" android:bottom="2px">
         <shape>
-            <!--    边框里面的颜色    -->
-            <solid android:color="#CDCD00"/>
+            <solid android:color="#FCFCFC"/>
         </shape>
     </item>
 </layer-list>

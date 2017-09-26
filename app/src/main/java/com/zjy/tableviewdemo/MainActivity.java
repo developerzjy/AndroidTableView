@@ -42,14 +42,12 @@ public class MainActivity extends AppCompatActivity {
 //        tv.setUnitSingleLine(false);
 //        tv.setUnitPadding(15,30,15,30);
 //        tv.setShowBorder(false);
-        tv.setHeaderColor(R.color.green);
 //        tv.setContentColor(R.color.colorPrimary);
-        tv.setTableColorRes(R.drawable.shape_right_border,0,0);
 
-        tv.setHeaderTextColor(R.color.test1);
-        tv.setContentTextColor(R.color.test2);
-        tv.setHeaderTextSize(25);
-        tv.setContentTextSize(15);
+//        tv.setHeaderTextColor(R.color.test1);
+//        tv.setContentTextColor(R.color.test2);
+//        tv.setHeaderTextSize(25);
+//        tv.setContentTextSize(15);
 //        tv.setIsHeaderTextBold(true);
 //        tv.setIsShowHeader(false);
 
