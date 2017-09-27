@@ -1,5 +1,6 @@
 package com.zjy.tableviewdemo;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
+
     private static final String TAG = "MainActivity";
 
     @Override
@@ -28,14 +30,14 @@ public class MainActivity extends AppCompatActivity {
         bt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                startActivity(new Intent(MainActivity.this,StyleActivity.class));
             }
         });
 
         TableView tv = (TableView)findViewById(R.id.test_table_view);
-        tv.setHeaderNames("t1","t2","t3","t4","t5","t6","t7","t8","t9","t10","t11","t12","t13","t14","t15");
+        //tv.setHeaderNames("t1","t2","t3","t4","t5","t6","t7","t8","t9","t10","t11","t12","t13","t14","t15");
         //tv.setHeaderNames("t1","t2","t3");
-        tv.setTableData(getTestData2());
+        //tv.setTableData(getTestData2());
 //        tv.setColumnWidth(1,100);
 //        tv.setColumnWidth(2,300);
 //        tv.setUnitSingleLine(false);
@@ -91,5 +93,6 @@ public class MainActivity extends AppCompatActivity {
     String[] a9 = {"9","9","999","9999","99","999","9999","q9999999999999999999999999999q","aaa","aaa","aaa","aaa","aaa","aaa","aaa"};
     String[] a10 = {"8","8","888","888888","88","888","8888","888888888","aaa","aaa","aaa","aaa","aaa","aaa","aaa"};
     String[] a11 = {"9","9","999","9999","99","999","9999","999999999999999","aaa","aaa","aaa","aaa","aaa","aaa","aaa"};
+
 
 }
