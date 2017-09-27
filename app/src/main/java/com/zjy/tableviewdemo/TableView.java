@@ -317,6 +317,10 @@ public class TableView extends HorizontalScrollView {
      * @param count 若参数值与表头 mHeaderNames 长度不一致会做一些默认的处理
      */
     public void setColumnCount(int count) {
+        if (count <= 0) {
+            Log.e(TAG, "setColumnCount: Invalid setting, the count should be larger than 0.");
+            return;
+        }
         mColumnCount = count;
         updateSomethingByColumnCountChange();
         if (mHeaderNames == null) {
