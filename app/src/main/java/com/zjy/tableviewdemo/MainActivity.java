@@ -1,11 +1,14 @@
 package com.zjy.tableviewdemo;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 
 import java.io.ByteArrayInputStream;
@@ -24,6 +27,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_main);
 
         Button bt = (Button) findViewById(R.id.test_bt);
@@ -35,9 +42,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         TableView tv = (TableView)findViewById(R.id.test_table_view);
-        //tv.setHeaderNames("t1","t2","t3","t4","t5","t6","t7","t8","t9","t10","t11","t12","t13","t14","t15");
-        //tv.setHeaderNames("t1","t2","t3");
-        //tv.setTableData(getTestData2());
+//        tv.setHeaderNames("t1","t2","t3","t4","t5","t6","t7","t8","t9","t10","t11","t12","t13","t14","t15");
+//        //tv.setHeaderNames("t1","t2","t3");
+//        tv.setTableData(getTestData2());
 //        tv.setColumnWidth(1,100);
 //        tv.setColumnWidth(2,300);
 //        tv.setUnitSingleLine(false);
@@ -94,5 +101,11 @@ public class MainActivity extends AppCompatActivity {
     String[] a10 = {"8","8","888","888888","88","888","8888","888888888","aaa","aaa","aaa","aaa","aaa","aaa","aaa"};
     String[] a11 = {"9","9","999","9999","99","999","9999","999999999999999","aaa","aaa","aaa","aaa","aaa","aaa","aaa"};
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+    }
 }

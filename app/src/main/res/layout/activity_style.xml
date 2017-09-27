@@ -5,9 +5,11 @@
     android:orientation="horizontal">
 
     <ScrollView
-        android:layout_width="200dp"
+        android:layout_width="220dp"
         android:layout_height="match_parent"
-        android:background="#BDBDBD">
+        android:background="#BDBDBD"
+        android:paddingBottom="30dp"
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -37,11 +39,12 @@
                     android:textSize="15sp" />
 
                 <EditText
+                    android:id="@+id/column_index_et"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#DDD"
                     android:digits="0123456789"
-                    android:ems="2"
+                    android:ems="4"
                     android:inputType="number"
                     android:maxLength="2"
                     android:paddingLeft="5dp"
@@ -62,18 +65,20 @@
                     android:textSize="15sp" />
 
                 <EditText
+                    android:id="@+id/column_width_et"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#DDD"
                     android:digits="0123456789"
-                    android:ems="2"
+                    android:ems="4"
                     android:inputType="number"
-                    android:maxLength="2"
+                    android:maxLength="3"
                     android:paddingLeft="5dp"
                     android:textSize="15sp" />
             </LinearLayout>
 
             <Button
+                android:id="@+id/set_column_width_bt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="完成" />
@@ -81,9 +86,9 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#DDD"
+                android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"/>
+                android:background="#DDD" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -91,10 +96,327 @@
                 android:text="边框线设置"
                 android:textSize="18sp" />
 
-            <Spinner
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="外边框线颜色："
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/outer_border_color_sp"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="表头边框颜色："
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/header_border_color_sp"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="内容边框颜色："
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/unit_border_color_sp"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="表头边框粗细："
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/header_border_width_sp"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="内容边框粗细："
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/unit_border_width_sp"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="#DDD" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:entries="@array/test_array" />
+                android:text="字体设置"
+                android:textSize="18sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="表头文字颜色："
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/header_text_color_sp"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="内容文字颜色："
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/unit_text_color_sp"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="表头文字大小："
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/header_text_size_sp"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="内容文字大小："
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/unit_text_size_sp"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner" />
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/bold_header_cb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:buttonTint="#555"
+                android:text="表头文字加粗"
+                android:textSize="15sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="#DDD" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="其他设置"
+                android:textSize="18sp" />
+
+            <CheckBox
+                android:id="@+id/show_header_cb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:buttonTint="#555"
+                android:text="显示表头"
+                android:textSize="15sp" />
+
+            <CheckBox
+                android:id="@+id/show_border_cb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:buttonTint="#555"
+                android:text="显示边框线"
+                android:textSize="15sp" />
+
+            <CheckBox
+                android:id="@+id/single_line_cb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:buttonTint="#555"
+                android:text="内容单行显示"
+                android:textSize="15sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="表头背景颜色："
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/header_back_color_sp"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="单元格背景色："
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/unit_back_color_sp"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="设置表格列数："
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/column_count_sp"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:text="单元格内边距："
+                    android:textSize="15sp" />
+
+                <Spinner
+                    android:id="@+id/set_padding_sp"
+                    android:layout_width="70dp"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/spinner" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
@@ -106,6 +428,13 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/info_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp" />
 
         <com.zjy.tableviewdemo.TableView
             android:id="@+id/style_table_view"
