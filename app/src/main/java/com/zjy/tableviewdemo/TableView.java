@@ -405,9 +405,11 @@ public class TableView extends HorizontalScrollView {
 
     public void setIsShowBorder(boolean isShow) {
         mIsShowBorder = isShow;
-        mFrameBorderWidth = 0;
-        mHeaderBorderWidth = 0;
-        mUnitBorderWidth = 0;
+        if (!mIsShowBorder) {
+            mFrameBorderWidth = 0;
+            mHeaderBorderWidth = 0;
+            mUnitBorderWidth = 0;
+        }
     }
 
     public void setFrameBorderColor(@ColorRes int color) {
