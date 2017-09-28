@@ -58,9 +58,9 @@ public class TableView extends HorizontalScrollView {
 
     private boolean mIsShowHeader;
     private int mHeaderTextSize;
-    private int mContentTextSize;
+    private int mUnitTextSize;
     private int mHeaderTextColor;
-    private int mContentTextColor;
+    private int mUnitTextColor;
     private boolean mIsHeaderTextBold;
 
     private boolean mIsShowBorder;
@@ -102,9 +102,9 @@ public class TableView extends HorizontalScrollView {
         mLeftPadding = DEFAULT_HORIZONTAL_PADDING;
         mRightPadding = DEFAULT_HORIZONTAL_PADDING;
         mHeaderTextSize = DEFAULT_TEXT_SIZE;
-        mContentTextSize = DEFAULT_TEXT_SIZE;
+        mUnitTextSize = DEFAULT_TEXT_SIZE;
         mHeaderTextColor = Color.parseColor(DEFAULT_TEXT_COLOR);
-        mContentTextColor = Color.parseColor(DEFAULT_TEXT_COLOR);
+        mUnitTextColor = Color.parseColor(DEFAULT_TEXT_COLOR);
         mIsHeaderTextBold = false;
         mIsShowHeader = true;
         mIsShowBorder = true;
@@ -179,8 +179,8 @@ public class TableView extends HorizontalScrollView {
         TextView view = new TextView(mContext);
         view.setGravity(Gravity.CENTER);
         view.setLayoutParams(params);
-        view.setTextSize(mContentTextSize);
-        view.setTextColor(mContentTextColor);
+        view.setTextSize(mUnitTextSize);
+        view.setTextColor(mUnitTextColor);
         if (mUnitSingleLine) {
             view.setMaxLines(1);
         }
@@ -383,16 +383,16 @@ public class TableView extends HorizontalScrollView {
         this.mHeaderTextSize = size;
     }
 
-    public void setContentTextSize(int size) {
-        this.mContentTextSize = size;
+    public void setUnitTextSize(int size) {
+        this.mUnitTextSize = size;
     }
 
     public void setHeaderTextColor(@ColorRes int color) {
         this.mHeaderTextColor = ContextCompat.getColor(mContext, color);
     }
 
-    public void setContentTextColor(@ColorRes int color) {
-        this.mContentTextColor = ContextCompat.getColor(mContext, color);
+    public void setUnitTextColor(@ColorRes int color) {
+        this.mUnitTextColor = ContextCompat.getColor(mContext, color);
     }
 
     public void setIsHeaderTextBold(boolean isBold) {
@@ -437,4 +437,12 @@ public class TableView extends HorizontalScrollView {
     public void setUnitBackColor(@ColorRes int color) {
         mUnitBackColor = ContextCompat.getColor(mContext, color);
     }
+
+    public void notifyAttributesChanged() {
+        mHeaderLayout.removeAllViews();
+        mContentListView.setAdapter(null);
+        fillTable();
+    }
+
+
 }

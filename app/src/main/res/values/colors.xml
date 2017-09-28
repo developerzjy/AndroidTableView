@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
-    <color name="white">#FFFFFF</color>
-    <color name="green">#ADFF2F</color>
-    <color name="test1">#0000CD</color>
-    <color name="test2">#7A378B</color>
-    <color name="test3">#A0522D</color>
+    <color name="red_color">#FF0000</color>
+    <color name="orange_color">#E9967A</color>
+    <color name="yellow_color">#FFFF00</color>
+    <color name="green_color">#00FF00</color>
+    <color name="cyan_color">#00FFFF</color>
+    <color name="blue_color">#0000FF</color>
+    <color name="purple_color">#9900FF</color>
+
+    <!--表格的一些默认颜色，与TableView里面定义的一致-->
+    <color name="def_text_color">#000000</color>
+    <color name="def_border_color">#000000</color>
+    <color name="def_header_back_color">#BDBDBD</color>
+    <color name="def_unit_back_color">#FCFCFC</color>
+
+
 </resources>

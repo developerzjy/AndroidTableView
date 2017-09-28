@@ -113,7 +113,8 @@
                     android:id="@+id/outer_border_color_sp"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/spinner" />
+                    android:background="@drawable/spinner"
+                    android:entries="@array/color_array" />
             </LinearLayout>
 
             <LinearLayout
@@ -133,7 +134,8 @@
                     android:id="@+id/header_border_color_sp"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/spinner" />
+                    android:background="@drawable/spinner"
+                    android:entries="@array/color_array" />
             </LinearLayout>
 
             <LinearLayout
@@ -153,7 +155,8 @@
                     android:id="@+id/unit_border_color_sp"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/spinner" />
+                    android:background="@drawable/spinner"
+                    android:entries="@array/color_array" />
             </LinearLayout>
 
             <LinearLayout
@@ -173,7 +176,8 @@
                     android:id="@+id/header_border_width_sp"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/spinner" />
+                    android:background="@drawable/spinner"
+                    android:entries="@array/border_width_array" />
             </LinearLayout>
 
             <LinearLayout
@@ -193,7 +197,8 @@
                     android:id="@+id/unit_border_width_sp"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/spinner" />
+                    android:background="@drawable/spinner"
+                    android:entries="@array/border_width_array" />
             </LinearLayout>
 
             <View
@@ -226,7 +231,8 @@
                     android:id="@+id/header_text_color_sp"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/spinner" />
+                    android:background="@drawable/spinner"
+                    android:entries="@array/color_array" />
             </LinearLayout>
 
             <LinearLayout
@@ -246,7 +252,8 @@
                     android:id="@+id/unit_text_color_sp"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/spinner" />
+                    android:background="@drawable/spinner"
+                    android:entries="@array/color_array" />
             </LinearLayout>
 
             <LinearLayout
@@ -266,7 +273,8 @@
                     android:id="@+id/header_text_size_sp"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/spinner" />
+                    android:background="@drawable/spinner"
+                    android:entries="@array/text_size_array" />
             </LinearLayout>
 
             <LinearLayout
@@ -286,7 +294,8 @@
                     android:id="@+id/unit_text_size_sp"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/spinner" />
+                    android:background="@drawable/spinner"
+                    android:entries="@array/text_size_array" />
             </LinearLayout>
 
             <CheckBox
@@ -355,7 +364,8 @@
                     android:id="@+id/header_back_color_sp"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/spinner" />
+                    android:background="@drawable/spinner"
+                    android:entries="@array/color_array" />
             </LinearLayout>
 
             <LinearLayout
@@ -375,7 +385,8 @@
                     android:id="@+id/unit_back_color_sp"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/spinner" />
+                    android:background="@drawable/spinner"
+                    android:entries="@array/color_array" />
             </LinearLayout>
 
             <LinearLayout
@@ -395,7 +406,8 @@
                     android:id="@+id/column_count_sp"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/spinner" />
+                    android:background="@drawable/spinner"
+                    android:entries="@array/column_count_array" />
             </LinearLayout>
 
             <LinearLayout
@@ -415,7 +427,8 @@
                     android:id="@+id/set_padding_sp"
                     android:layout_width="70dp"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/spinner" />
+                    android:background="@drawable/spinner"
+                    android:entries="@array/unit_padding_array" />
             </LinearLayout>
 
         </LinearLayout>

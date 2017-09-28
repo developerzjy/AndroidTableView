@@ -8,12 +8,8 @@
         android:id="@+id/test_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="测试"/>
-
-    <com.zjy.tableviewdemo.TableView
-        android:id="@+id/test_table_view"
-        android:layout_width="300dp"
-        android:layout_height="150dp"
-        android:layout_centerInParent="true" />
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="30dp"
+        android:text="TableView 样式" />
 
 </RelativeLayout>

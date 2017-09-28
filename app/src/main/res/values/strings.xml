@@ -1,10 +1,41 @@
 <resources>
     <string name="app_name">TableViewDemo</string>
 
-    <string-array name="test_array">
-        <item>1</item>
-        <item>2</item>
+    <string-array name="color_array">
+        <item>默认</item>
+        <item>赤色</item>
+        <item>橙色</item>
+        <item>黄色</item>
+        <item>绿色</item>
+        <item>青色</item>
+        <item>蓝色</item>
+        <item>紫色</item>
+    </string-array>
+
+    <string-array name="border_width_array">
+        <item>默认</item>
+        <item>5px</item>
+        <item>10px</item>
+        <item>15px</item>
+    </string-array>
+
+    <string-array name="text_size_array">
+        <item>默认</item>
+        <item>18</item>
+        <item>20</item>
+        <item>24</item>
+    </string-array>
+
+    <string-array name="column_count_array">
+        <item>自动</item>
         <item>3</item>
-        <item>4</item>
+        <item>5</item>
+        <item>15</item>
+    </string-array>
+
+    <string-array name="unit_padding_array">
+        <item>默认</item>
+        <item>小</item>
+        <item>大</item>
     </string-array>
 </resources>
