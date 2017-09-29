@@ -3,37 +3,24 @@ package com.zjy.tableviewdemo;
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.support.annotation.AnyRes;
-import android.support.annotation.AttrRes;
-import android.support.annotation.ColorInt;
 import android.support.annotation.ColorRes;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.SparseIntArray;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnCheckedChanged;
-import butterknife.OnItemClick;
+import butterknife.OnClick;
 import butterknife.OnItemSelected;
 import butterknife.Unbinder;
 
@@ -43,18 +30,15 @@ import butterknife.Unbinder;
 
 public class StyleActivity extends Activity {
 
-//    @BindView(R.id.column_index_et)
-//    EditText mColumnIndexEt;
-//    @BindView(R.id.column_width_et)
-//    EditText mColumnWidthEt;
-//    @BindView(R.id.set_column_width_bt)
-//    Button mSetColumnWidthBt;
-
     private Unbinder mButterKnifeBinder;
     @BindView(R.id.style_table_view)
     TableView mTableView;
     @BindView(R.id.info_text)
     TextView mInfoTv;
+    @BindView(R.id.column_index_et)
+    EditText mColumnIndexEt;
+    @BindView(R.id.column_width_et)
+    EditText mColumnWidthEt;
     private List<Integer> mTemp = new ArrayList<>(); // 用来避免Spinner在初始化的时候调用OnItemSelected事件
     private int[] mColorId = {
             R.color.red_color,
@@ -99,7 +83,7 @@ public class StyleActivity extends Activity {
             R.id.header_text_color_sp, R.id.unit_text_color_sp, R.id.header_back_color_sp, R.id.unit_back_color_sp})
     void onColorSelected(AdapterView<?> parent, View view, int position, long id) {
         int vId = parent.getId();
-        if (!mTemp.contains(vId)){
+        if (!mTemp.contains(vId)) {
             mTemp.add(vId);
             return;
         }
@@ -126,7 +110,7 @@ public class StyleActivity extends Activity {
             R.id.unit_text_size_sp, R.id.column_count_sp, R.id.set_padding_sp})
     void onSomethingSelected(AdapterView<?> parent, View view, int position, long id) {
         int vId = parent.getId();
-        if (!mTemp.contains(vId)){
+        if (!mTemp.contains(vId)) {
             mTemp.add(vId);
             return;
         }
@@ -152,7 +136,7 @@ public class StyleActivity extends Activity {
         mTableView.notifyAttributesChanged();
     }
 
-    @OnCheckedChanged({R.id.bold_header_cb,R.id.show_header_cb,R.id.show_border_cb,R.id.single_line_cb})
+    @OnCheckedChanged({R.id.bold_header_cb, R.id.show_header_cb, R.id.show_border_cb, R.id.single_line_cb})
     void onCheckBoxCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         int id = buttonView.getId();
         if (id == R.id.bold_header_cb) {
@@ -165,6 +149,30 @@ public class StyleActivity extends Activity {
             mTableView.setUnitSingleLine(isChecked);
         }
         mTableView.notifyAttributesChanged();
+    }
+
+    @OnClick(R.id.set_column_width_bt)
+    void onSetColumnWidthBtClick(View v) {
+        int index;
+        int width;
+        String indexStr = mColumnIndexEt.getText().toString();
+        String widthStr = mColumnWidthEt.getText().toString();
+        if (TextUtils.isEmpty(indexStr)) {
+            mColumnIndexEt.setError("请输入值");
+            index = -1;
+        } else {
+            index = Integer.parseInt(indexStr);
+        }
+        if (TextUtils.isEmpty(widthStr)) {
+            mColumnWidthEt.setError("请输入值");
+            width = -1;
+        } else {
+            width = Integer.parseInt(widthStr);
+        }
+        if (index > 0 && width > 0) {
+            mTableView.setColumnWidth(index, width);
+            mTableView.notifyAttributesChanged();
+        }
     }
 
     @Override

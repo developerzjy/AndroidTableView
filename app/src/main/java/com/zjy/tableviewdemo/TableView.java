@@ -360,6 +360,10 @@ public class TableView extends HorizontalScrollView {
                     " mColumnWidth.length=" + mColumnWidth.length);
             return;
         }
+        if (width <= 0) {
+            Log.e(TAG, "setColumnWidth: width can not be " + width);
+            return;
+        }
         mColumnWidth[columnIndex] = width;
     }
 
