@@ -196,6 +196,7 @@ public class TableView extends HorizontalScrollView {
     private void fillTable() {
         updateDrawable();
         if (mIsShowHeader) {
+            mHeaderLayout.setVisibility(VISIBLE);
             mHeaderLayout.addView(createHeader());
         } else {
             mHeaderLayout.setVisibility(GONE);
@@ -409,6 +410,10 @@ public class TableView extends HorizontalScrollView {
             mFrameBorderWidth = 0;
             mHeaderBorderWidth = 0;
             mUnitBorderWidth = 0;
+        } else {
+            mFrameBorderWidth = DEFAULT_BORDER_WIDTH;
+            mHeaderBorderWidth = DEFAULT_BORDER_WIDTH;
+            mUnitBorderWidth = DEFAULT_BORDER_WIDTH;
         }
     }
 

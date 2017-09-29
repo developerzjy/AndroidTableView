@@ -19,16 +19,20 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
 import butterknife.OnItemClick;
 import butterknife.OnItemSelected;
 import butterknife.Unbinder;
@@ -45,20 +49,13 @@ public class StyleActivity extends Activity {
 //    EditText mColumnWidthEt;
 //    @BindView(R.id.set_column_width_bt)
 //    Button mSetColumnWidthBt;
-//    @BindView(R.id.bold_header_cb)
-//    CheckBox mHBoldCb;
-//    @BindView(R.id.show_header_cb)
-//    CheckBox mShowHeaderCb;
-//    @BindView(R.id.show_border_cb)
-//    CheckBox mShowBorderCb;
-//    @BindView(R.id.single_line_cb)
-//    CheckBox mUSingleLineCb;
 
     private Unbinder mButterKnifeBinder;
     @BindView(R.id.style_table_view)
     TableView mTableView;
     @BindView(R.id.info_text)
     TextView mInfoTv;
+    private List<Integer> mTemp = new ArrayList<>(); // 用来避免Spinner在初始化的时候调用OnItemSelected事件
     private int[] mColorId = {
             R.color.red_color,
             R.color.orange_color,
@@ -102,6 +99,10 @@ public class StyleActivity extends Activity {
             R.id.header_text_color_sp, R.id.unit_text_color_sp, R.id.header_back_color_sp, R.id.unit_back_color_sp})
     void onColorSelected(AdapterView<?> parent, View view, int position, long id) {
         int vId = parent.getId();
+        if (!mTemp.contains(vId)){
+            mTemp.add(vId);
+            return;
+        }
         @ColorRes int color = position == 0 ? mDefColor.get(vId) : mColorId[position - 1];
         if (vId == R.id.outer_border_color_sp) {
             mTableView.setFrameBorderColor(color);
@@ -125,6 +126,10 @@ public class StyleActivity extends Activity {
             R.id.unit_text_size_sp, R.id.column_count_sp, R.id.set_padding_sp})
     void onSomethingSelected(AdapterView<?> parent, View view, int position, long id) {
         int vId = parent.getId();
+        if (!mTemp.contains(vId)){
+            mTemp.add(vId);
+            return;
+        }
         if (vId == R.id.header_border_width_sp) {
             mTableView.setHeaderBorderWidth(mBorderWidth[position]);
         } else if (vId == R.id.unit_border_width_sp) {
@@ -143,6 +148,21 @@ public class StyleActivity extends Activity {
             } else {
                 mTableView.setUnitPadding(5, 10, 5, 10);
             }
+        }
+        mTableView.notifyAttributesChanged();
+    }
+
+    @OnCheckedChanged({R.id.bold_header_cb,R.id.show_header_cb,R.id.show_border_cb,R.id.single_line_cb})
+    void onCheckBoxCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        int id = buttonView.getId();
+        if (id == R.id.bold_header_cb) {
+            mTableView.setIsHeaderTextBold(isChecked);
+        } else if (id == R.id.show_header_cb) {
+            mTableView.setIsShowHeader(isChecked);
+        } else if (id == R.id.show_border_cb) {
+            mTableView.setIsShowBorder(isChecked);
+        } else if (id == R.id.single_line_cb) {
+            mTableView.setUnitSingleLine(isChecked);
         }
         mTableView.notifyAttributesChanged();
     }
