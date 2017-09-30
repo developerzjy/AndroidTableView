@@ -326,6 +326,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:buttonTint="#555"
+                android:checked="true"
                 android:text="显示表头"
                 android:textSize="15sp" />
 
@@ -335,6 +336,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:buttonTint="#555"
+                android:checked="true"
                 android:text="显示边框线"
                 android:textSize="15sp" />
 
@@ -344,6 +346,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:buttonTint="#555"
+                android:checked="true"
                 android:text="内容单行显示"
                 android:textSize="15sp" />
 

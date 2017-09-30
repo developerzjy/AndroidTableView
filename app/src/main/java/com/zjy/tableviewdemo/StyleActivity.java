@@ -169,7 +169,7 @@ public class StyleActivity extends Activity {
         } else {
             width = Integer.parseInt(widthStr);
         }
-        if (index > 0 && width > 0) {
+        if (index >= 0 && width > 0) {
             mTableView.setColumnWidth(index, width);
             mTableView.notifyAttributesChanged();
         }
