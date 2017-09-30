@@ -59,7 +59,7 @@ public class StyleActivity extends Activity {
     }};
     private int[] mBorderWidth = {2, 5, 10, 15};
     private int[] mTextSize = {15, 18, 20, 24};
-    private int[] mColumnCount = {-1, 3, 5, 15};
+    private int[] mColumnCount = {10, 3, 5, 15};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
