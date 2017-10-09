@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -29,6 +30,12 @@ public class MainActivity extends Activity {
                 startActivity(new Intent(MainActivity.this,StyleActivity.class));
             }
         });
+
+        TableView tv = (TableView)findViewById(R.id.main_table);
+        tv.setHeaderNames("t0","t1","t2","t3","t4","t5","t6","t7","t8","t9");
+        tv.setTableData(getTestData());
+        tv.setEventMode(TableView.MODE_ALL_UNIT_EVENT);
+
     }
 
     @Override
@@ -37,5 +44,41 @@ public class MainActivity extends Activity {
         if (getRequestedOrientation() != ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
+    }
+
+    private String[][] getTestData() {
+        String[][] testData = {
+                {"1","","","","","","","","",""},
+                {"2","","","","","","","","",""},
+                {"3","","","","","","","","",""},
+                {"4","","","","","","","","",""},
+                {"5","","","","","","","","",""},
+                {"6","","","","","","","","",""},
+                {"7","","","","","","","","",""},
+                {"8","","","","","","","","",""},
+                {"9","","","","","","","","",""},
+                {"10","","","","","","","","",""},
+                {"11","","","","","","","","",""},
+                {"12","","","","","","","","",""},
+                {"13","","","","","","","","",""},
+                {"14","","","","","","","","",""},
+                {"15","","","","","","","","",""},
+                {"16","","","","","","","","",""},
+                {"17","","","","","","","","",""},
+                {"18","","","","","","","","",""},
+                {"19","","","","","","","","",""},
+                {"20","","","","","","","","",""},
+        };
+
+        for (int i = 0; i < testData.length; i++) {
+            String[] arr = testData[i];
+            for (int j = 0; j < arr.length; j++) {
+                if (TextUtils.isEmpty(testData[i][j])) {
+                    testData[i][j] = "( " + (i + 1) + " , " + (j + 1) + " )";
+                }
+            }
+        }
+
+        return testData;
     }
 }

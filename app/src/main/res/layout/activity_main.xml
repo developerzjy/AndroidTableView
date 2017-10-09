@@ -12,4 +12,10 @@
         android:layout_marginTop="30dp"
         android:text="TableView 样式" />
 
+    <com.zjy.tableviewdemo.TableView
+        android:id="@+id/main_table"
+        android:layout_width="500dp"
+        android:layout_height="300dp"
+        android:layout_centerInParent="true"/>
+
 </RelativeLayout>

@@ -7,12 +7,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.ColorRes;
+import android.support.annotation.IntDef;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
@@ -25,6 +27,8 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +36,11 @@ import java.util.List;
 public class TableView extends HorizontalScrollView {
 
     private static final String TAG = "TableView";
+
+    public static final int MODE_NONE_EVENT = 0; //不处理任何事件
+    public static final int MODE_ITEM_EVENT = 1; //item处理事件
+    public static final int MODE_ALL_UNIT_EVENT = 2; //所有单元格处理事件
+    public static final int MODE_EITHER_UNIT_EVENT = 3; //某列单元格处理事件
 
     private static final String DEFAULT_TEXT_COLOR = "#000000";
     private static final String DEFAULT_BORDER_COLOR = "#000000";
@@ -76,6 +85,13 @@ public class TableView extends HorizontalScrollView {
     private int mUnitBorderColor;
     private int mUnitBackColor;
 
+    @EventMode
+    private int mEventMode;
+    private OnTableItemClickListener mItemClickListener;
+    private OnTableItemLongClickListener mItemLongClickListener;
+
+    private List<Integer> mColumnEventIndex = new ArrayList<>();
+
     public TableView(Context context) {
         this(context, null);
     }
@@ -118,6 +134,7 @@ public class TableView extends HorizontalScrollView {
         mUnitBorderColor = Color.parseColor(DEFAULT_BORDER_COLOR);
         mUnitBackColor = Color.parseColor(DEFAULT_UNIT_BACK_COLOR);
         updateDrawable();
+        mEventMode = MODE_NONE_EVENT;
     }
 
     private void updateDrawable() {
@@ -195,6 +212,25 @@ public class TableView extends HorizontalScrollView {
 
         mAdapter = new TableAdapter();
         mContentListView.setAdapter(mAdapter);
+        if (mEventMode == MODE_ITEM_EVENT) {
+            mContentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (mItemClickListener != null) {
+                        mItemClickListener.onItemClick(position, getRowData(position));
+                    }
+                }
+            });
+            mContentListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    if (mItemLongClickListener != null) {
+                        mItemLongClickListener.onItemLongClick(position, getRowData(position));
+                    }
+                    return false;
+                }
+            });
+        }
 
         setBackground(mFrameDrawable);
     }
@@ -248,9 +284,23 @@ public class TableView extends HorizontalScrollView {
                 if (childView instanceof TextView) {
                     ((TextView) childView).setText(text);
                 }
+                if (mEventMode == MODE_ALL_UNIT_EVENT || mEventMode == MODE_EITHER_UNIT_EVENT) {
+                    if (mColumnEventIndex.contains(i)) {
+                        childView.setTag(new int[]{position, i});
+                        childView.setOnClickListener(clickListener);
+                    }
+                }
             }
             return convertView;
         }
+
+        private View.OnClickListener clickListener = new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int[] coordinate = (int[])v.getTag();
+                Log.d(TAG, "onClick: row=" + coordinate[0] + "  column=" + coordinate[1]);
+            }
+        };
     }
 
     private List<String[]> copyData(List<String[]> srcList) {
@@ -287,6 +337,17 @@ public class TableView extends HorizontalScrollView {
         for (int i = 0; i < mColumnCount; i++) {
             mColumnWidth[i] = DEFAULT_COLUMN_WIDTH;
         }
+    }
+
+    /**
+     * 获取表格某一行的数据
+     */
+    public String[] getRowData(int position) {
+        String[] src = mTableData.get(position);
+        String[] dest = new String[mColumnCount];
+        int length = Math.min(src.length, mColumnCount);
+        System.arraycopy(src, 0, dest, 0, length);
+        return dest;
     }
 
     /**
@@ -440,6 +501,35 @@ public class TableView extends HorizontalScrollView {
         mUnitBackColor = ContextCompat.getColor(mContext, color);
     }
 
+    public void setEventMode(@EventMode int mode) {
+        mEventMode = mode;
+        mColumnEventIndex.clear();
+        if (mode == MODE_ALL_UNIT_EVENT) {
+            for (int i = 0; i < mColumnCount; i++) {
+                mColumnEventIndex.add(i);
+            }
+        }
+    }
+
+    public void setOnItemClickListener(OnTableItemClickListener listener) {
+        mItemClickListener = listener;
+    }
+
+    public void setOnItemLongClickListener(OnTableItemLongClickListener listener) {
+        mItemLongClickListener = listener;
+    }
+
+    public void setColumnEventIndex(int... index) {
+        if (mEventMode != MODE_EITHER_UNIT_EVENT) {
+            return;
+        }
+        for (int x : index) {
+            if (!mColumnEventIndex.contains(x) && x < mColumnCount && x >= 0) {
+                mColumnEventIndex.add(x);
+            }
+        }
+    }
+
     public void notifyAttributesChanged() {
         mHeaderLayout.removeAllViews();
         mContentListView.setAdapter(null);
@@ -473,5 +563,18 @@ public class TableView extends HorizontalScrollView {
         public void setBorderWidth(int width) {
             mBorderWidth = width;
         }
+    }
+
+    @IntDef({MODE_NONE_EVENT, MODE_ITEM_EVENT, MODE_ALL_UNIT_EVENT, MODE_EITHER_UNIT_EVENT})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface EventMode {
+    }
+
+    public interface OnTableItemClickListener {
+        void onItemClick(int position, String[] rowData);
+    }
+
+    public interface OnTableItemLongClickListener {
+        void onItemLongClick(int position, String[] rowData);
     }
 }
