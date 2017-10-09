@@ -5,6 +5,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.ColorRes;
 import android.support.annotation.IntDef;
@@ -12,6 +13,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -46,6 +48,8 @@ public class TableView extends HorizontalScrollView {
     private static final String DEFAULT_BORDER_COLOR = "#000000";
     private static final String DEFAULT_HEADER_BACK_COLOR = "#BDBDBD";
     private static final String DEFAULT_UNIT_BACK_COLOR = "#FCFCFC";
+    private static final String DEFAULT_UNIT_DOWN_COLOR = "#F0F0F0";
+    private static final String DEFAULT_UNIT_SELECTED_COLOR = "#BEBEBE";
     private static final int DEFAULT_COLUMN_WIDTH = 200;
     private static final int DEFAULT_HORIZONTAL_PADDING = 5;
     private static final int DEFAULT_VERTICAL_PADDING = 10;
@@ -89,8 +93,12 @@ public class TableView extends HorizontalScrollView {
     private int mEventMode;
     private OnTableItemClickListener mItemClickListener;
     private OnTableItemLongClickListener mItemLongClickListener;
+    private OnUnitClickListener mUnitClickListener;
 
     private List<Integer> mColumnEventIndex = new ArrayList<>();
+    private int mUnitDownColor;
+    private boolean mIsUnitSelectable;
+    private int mUnitSelectedColor;
 
     public TableView(Context context) {
         this(context, null);
@@ -133,8 +141,11 @@ public class TableView extends HorizontalScrollView {
         mUnitBorderWidth = DEFAULT_BORDER_WIDTH;
         mUnitBorderColor = Color.parseColor(DEFAULT_BORDER_COLOR);
         mUnitBackColor = Color.parseColor(DEFAULT_UNIT_BACK_COLOR);
+        mUnitDownColor = Color.parseColor(DEFAULT_UNIT_DOWN_COLOR);
+        mUnitSelectedColor = Color.parseColor(DEFAULT_UNIT_SELECTED_COLOR);
         updateDrawable();
         mEventMode = MODE_NONE_EVENT;
+        mIsUnitSelectable = false;
     }
 
     private void updateDrawable() {
@@ -227,7 +238,7 @@ public class TableView extends HorizontalScrollView {
                     if (mItemLongClickListener != null) {
                         mItemLongClickListener.onItemLongClick(position, getRowData(position));
                     }
-                    return false;
+                    return true;
                 }
             });
         }
@@ -287,18 +298,41 @@ public class TableView extends HorizontalScrollView {
                 if (mEventMode == MODE_ALL_UNIT_EVENT || mEventMode == MODE_EITHER_UNIT_EVENT) {
                     if (mColumnEventIndex.contains(i)) {
                         childView.setTag(new int[]{position, i});
-                        childView.setOnClickListener(clickListener);
+                        childView.setOnTouchListener(touchListener);
                     }
                 }
             }
             return convertView;
         }
 
-        private View.OnClickListener clickListener = new OnClickListener() {
+        private View.OnTouchListener touchListener = new OnTouchListener() {
+            private boolean isContainsUnit = false;
             @Override
-            public void onClick(View v) {
-                int[] coordinate = (int[])v.getTag();
-                Log.d(TAG, "onClick: row=" + coordinate[0] + "  column=" + coordinate[1]);
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    if (mIsUnitSelectable){
+                        //颜色设置为选中或者取消选中
+                    }else {
+                        v.setBackgroundColor(mUnitDownColor);
+                    }
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    int[] coordinate = (int[]) v.getTag();
+                    if (mUnitClickListener != null) {
+                        mUnitClickListener.onUnitClick(coordinate[0], coordinate[1], getRowData(coordinate[0])[coordinate[1]]);
+                    }
+                    if (mIsUnitSelectable){
+                        //将选中的unit保存起来或者把保存的取消掉
+                    } else {
+                        v.setBackgroundColor(mUnitBackColor);
+                    }
+                } else if (event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    if (mIsUnitSelectable){
+                        //颜色设置为取消选中或者选中（与down事件相反）
+                    }else {
+                        v.setBackgroundColor(mUnitBackColor);
+                    }
+                }
+                return true;
             }
         };
     }
@@ -501,6 +535,23 @@ public class TableView extends HorizontalScrollView {
         mUnitBackColor = ContextCompat.getColor(mContext, color);
     }
 
+    public void setUnitSelectable(boolean selectable) {
+        mIsUnitSelectable = selectable;
+    }
+    /**
+     * 在单元格处理事件的时候，设置单元格按下状态的颜色
+     */
+    public void setUnitDownColor(@ColorRes int color) {
+        mUnitDownColor = ContextCompat.getColor(mContext, color);
+    }
+
+    /**
+     * 当单元格可以被选中的时候，设置被选中状态的颜色
+     */
+    public void setUnitSelectedColor(@ColorRes int color){
+        mUnitSelectedColor = ContextCompat.getColor(mContext, color);
+    }
+
     public void setEventMode(@EventMode int mode) {
         mEventMode = mode;
         mColumnEventIndex.clear();
@@ -517,6 +568,10 @@ public class TableView extends HorizontalScrollView {
 
     public void setOnItemLongClickListener(OnTableItemLongClickListener listener) {
         mItemLongClickListener = listener;
+    }
+
+    public void setOnUnitClickListener(OnUnitClickListener listener) {
+        mUnitClickListener = listener;
     }
 
     public void setColumnEventIndex(int... index) {
@@ -576,5 +631,9 @@ public class TableView extends HorizontalScrollView {
 
     public interface OnTableItemLongClickListener {
         void onItemLongClick(int position, String[] rowData);
+    }
+
+    public interface OnUnitClickListener {
+        void onUnitClick(int row, int column, String unitText);
     }
 }

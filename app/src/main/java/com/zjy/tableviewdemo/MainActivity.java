@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -34,7 +35,31 @@ public class MainActivity extends Activity {
         TableView tv = (TableView)findViewById(R.id.main_table);
         tv.setHeaderNames("t0","t1","t2","t3","t4","t5","t6","t7","t8","t9");
         tv.setTableData(getTestData());
-        tv.setEventMode(TableView.MODE_ALL_UNIT_EVENT);
+
+        //tv.setEventMode(TableView.MODE_NONE_EVENT);
+        //tv.setEventMode(TableView.MODE_ITEM_EVENT);
+        //tv.setEventMode(TableView.MODE_ALL_UNIT_EVENT);
+        //tv.setEventMode(TableView.MODE_EITHER_UNIT_EVENT);
+        //tv.setColumnEventIndex(1,7,9,18);
+
+        tv.setOnItemClickListener(new TableView.OnTableItemClickListener() {
+            @Override
+            public void onItemClick(int position, String[] rowData) {
+                Log.d(TAG, "click item,pos="+position+"  data="+rowData[1]);
+            }
+        });
+        tv.setOnItemLongClickListener(new TableView.OnTableItemLongClickListener() {
+            @Override
+            public void onItemLongClick(int position, String[] rowData) {
+                Log.d(TAG, "long click item,pos="+position+"  data="+rowData[1]);
+            }
+        });
+        tv.setOnUnitClickListener(new TableView.OnUnitClickListener() {
+            @Override
+            public void onUnitClick(int row, int column, String unitText) {
+                Log.d(TAG, "onUnitClick: row="+row+"  column="+column+"  text="+unitText);
+            }
+        });
 
     }
 
