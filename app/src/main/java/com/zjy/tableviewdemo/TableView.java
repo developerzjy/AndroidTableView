@@ -33,7 +33,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TableView extends HorizontalScrollView {
 
@@ -99,6 +101,7 @@ public class TableView extends HorizontalScrollView {
     private int mUnitDownColor;
     private boolean mIsUnitSelectable;
     private int mUnitSelectedColor;
+    private Map<Point, String> mUnitSelectedMap = new HashMap<>();
 
     public TableView(Context context) {
         this(context, null);
@@ -297,8 +300,14 @@ public class TableView extends HorizontalScrollView {
                 }
                 if (mEventMode == MODE_ALL_UNIT_EVENT || mEventMode == MODE_EITHER_UNIT_EVENT) {
                     if (mColumnEventIndex.contains(i)) {
-                        childView.setTag(new int[]{position, i});
+                        Point coordinate = new Point(i, position); //column=x, row=y
+                        childView.setTag(coordinate);
                         childView.setOnTouchListener(touchListener);
+                        if (mUnitSelectedMap.containsKey(coordinate)) {
+                            childView.setBackgroundColor(mUnitSelectedColor);
+                        } else {
+                            childView.setBackgroundColor(mUnitBackColor);
+                        }
                     }
                 }
             }
@@ -306,29 +315,42 @@ public class TableView extends HorizontalScrollView {
         }
 
         private View.OnTouchListener touchListener = new OnTouchListener() {
+
             private boolean isContainsUnit = false;
+
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (mIsUnitSelectable){
+                    if (mIsUnitSelectable) {
+                        Point coordinate = (Point) v.getTag();
+                        isContainsUnit = mUnitSelectedMap.containsKey(coordinate);
                         //颜色设置为选中或者取消选中
-                    }else {
+                        int color = isContainsUnit ? mUnitBackColor : mUnitSelectedColor;
+                        v.setBackgroundColor(color);
+                    } else {
                         v.setBackgroundColor(mUnitDownColor);
                     }
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    int[] coordinate = (int[]) v.getTag();
+                    Point coordinate = (Point) v.getTag();
                     if (mUnitClickListener != null) {
-                        mUnitClickListener.onUnitClick(coordinate[0], coordinate[1], getRowData(coordinate[0])[coordinate[1]]);
+                        mUnitClickListener.onUnitClick(coordinate.y, coordinate.x, getRowData(coordinate.y)[coordinate.x]);
                     }
-                    if (mIsUnitSelectable){
+                    if (mIsUnitSelectable) {
                         //将选中的unit保存起来或者把保存的取消掉
+                        if (isContainsUnit) {
+                            mUnitSelectedMap.remove(coordinate);
+                        } else {
+                            mUnitSelectedMap.put(coordinate, getRowData(coordinate.y)[coordinate.x]);
+                        }
                     } else {
                         v.setBackgroundColor(mUnitBackColor);
                     }
                 } else if (event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    if (mIsUnitSelectable){
+                    if (mIsUnitSelectable) {
                         //颜色设置为取消选中或者选中（与down事件相反）
-                    }else {
+                        int color = isContainsUnit ? mUnitSelectedColor : mUnitBackColor;
+                        v.setBackgroundColor(color);
+                    } else {
                         v.setBackgroundColor(mUnitBackColor);
                     }
                 }
@@ -374,7 +396,7 @@ public class TableView extends HorizontalScrollView {
     }
 
     /**
-     * 获取表格某一行的数据
+     * 获取表格某一行的数据,返回字符串数组
      */
     public String[] getRowData(int position) {
         String[] src = mTableData.get(position);
@@ -382,6 +404,34 @@ public class TableView extends HorizontalScrollView {
         int length = Math.min(src.length, mColumnCount);
         System.arraycopy(src, 0, dest, 0, length);
         return dest;
+    }
+
+    /**
+     * 获取所有选中的单元格信息
+     * 返回一个map，key是单元格的坐标信息（column=x, row=y），值是单元格显示的字符串
+     */
+    public Map<Point, String> getSelectedUnits() {
+        return mUnitSelectedMap;
+    }
+
+    /**
+     * 清除所有选择的单元格
+     */
+    public void clearSelectedUnits() {
+        mUnitSelectedMap.clear();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    /**
+     * 设置 第row行 第column列 为选中状态
+     */
+    public void setUnitSelected(int row, int column) {
+        if ((mEventMode == MODE_ALL_UNIT_EVENT || mEventMode == MODE_EITHER_UNIT_EVENT) && mIsUnitSelectable) {
+            Point p = new Point(column, row);
+            if (!mUnitSelectedMap.containsKey(p)) {
+                mUnitSelectedMap.put(p, getRowData(row)[column]);
+            }
+        }
     }
 
     /**
@@ -538,6 +588,7 @@ public class TableView extends HorizontalScrollView {
     public void setUnitSelectable(boolean selectable) {
         mIsUnitSelectable = selectable;
     }
+
     /**
      * 在单元格处理事件的时候，设置单元格按下状态的颜色
      */
@@ -548,13 +599,14 @@ public class TableView extends HorizontalScrollView {
     /**
      * 当单元格可以被选中的时候，设置被选中状态的颜色
      */
-    public void setUnitSelectedColor(@ColorRes int color){
+    public void setUnitSelectedColor(@ColorRes int color) {
         mUnitSelectedColor = ContextCompat.getColor(mContext, color);
     }
 
     public void setEventMode(@EventMode int mode) {
         mEventMode = mode;
         mColumnEventIndex.clear();
+        mUnitSelectedMap.clear();
         if (mode == MODE_ALL_UNIT_EVENT) {
             for (int i = 0; i < mColumnCount; i++) {
                 mColumnEventIndex.add(i);

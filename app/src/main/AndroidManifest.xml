@@ -16,6 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".StyleActivity"/>
+        <activity android:name=".EventActivity"/>
     </application>
 
 </manifest>
