@@ -487,6 +487,48 @@ public class TableView extends HorizontalScrollView {
     }
 
     /**
+     * 添加一行数据到表格末尾
+     */
+    public void addData(String[] data) {
+        String[] dest = new String[mColumnCount];
+        int length = Math.min(data.length, mColumnCount);
+        System.arraycopy(data, 0, dest, 0, length);
+        mTableData.add(dest);
+    }
+
+    /**
+     * 添加一行数据到第row行
+     */
+    public void addRowData(int row, String[] data) {
+        String[] dest = new String[mColumnCount];
+        int length = Math.min(data.length, mColumnCount);
+        System.arraycopy(data, 0, dest, 0, length);
+        mTableData.add(row, dest);
+    }
+
+    /**
+     * 删除一行数据
+     */
+    public void deleteRowData(int row) {
+        mTableData.remove(row);
+    }
+
+    /**
+     * 修改一行数据
+     */
+    public void modifyRowData(int row, String[] newData) {
+        deleteRowData(row);
+        addRowData(row, newData);
+    }
+
+    /**
+     * 获取所有数据
+     */
+    public List<String[]> getAllData() {
+        return copyData(mTableData);
+    }
+
+    /**
      * 设置第 columnIndex 列的宽度为 width
      */
     public void setColumnWidth(int columnIndex, int width) {
